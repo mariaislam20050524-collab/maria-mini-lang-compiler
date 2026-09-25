@@ -5,10 +5,16 @@ sys.path.append(str(Path(__file__).parent))
 
 from lexer.lexer import Lexer
 from lexer.errors import LexerError
+
 from parser.parser import Parser, ParserError
+
 from semantic.analyzer import SemanticAnalyzer, SemanticError
+
 from codegen.codegen import CodeGenerator
+
 from tac.tac import TACGenerator
+
+from optimizer.optimizer import Optimizer
 
 
 def main():
@@ -29,6 +35,7 @@ def main():
         # -------------------------
 
         lexer = Lexer(source_code)
+
         tokens = lexer.tokenize()
 
         print("=== LEXER SUCCESS ===")
@@ -39,6 +46,7 @@ def main():
         # -------------------------
 
         parser = Parser(tokens)
+
         ast = parser.parse()
 
         print("=== PARSER SUCCESS ===")
@@ -49,6 +57,7 @@ def main():
         # -------------------------
 
         analyzer = SemanticAnalyzer()
+
         analyzer.analyze(ast)
 
         print("=== SEMANTIC ANALYSIS SUCCESS ===")
@@ -59,15 +68,18 @@ def main():
         # -------------------------
 
         generator = CodeGenerator()
+
         output = generator.generate(ast)
 
         print("=== GENERATED CODE ===")
         print(output)
-                # -------------------------
+
+        # -------------------------
         # TAC Generation
         # -------------------------
 
         tac_generator = TACGenerator()
+
         tac = tac_generator.generate(ast)
 
         print("=== THREE ADDRESS CODE ===")
@@ -75,19 +87,37 @@ def main():
         for instruction in tac:
             print(instruction)
 
+        # -------------------------
+        # TAC Optimization
+        # -------------------------
+
+        optimizer = Optimizer()
+
+        optimized_tac = optimizer.optimize(tac)
+
+        print("=== OPTIMIZED TAC ===")
+
+        for instruction in optimized_tac:
+            print(instruction)
+
     except FileNotFoundError:
+
         print(f"File not found: {filename}")
 
     except LexerError as error:
+
         print(f"Lexer error: {error}")
 
     except ParserError as error:
+
         print(f"Parser error: {error}")
 
     except SemanticError as error:
+
         print(f"Semantic error: {error}")
 
     except Exception as error:
+
         print(f"Error: {error}")
 
 
