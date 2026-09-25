@@ -8,6 +8,7 @@ from lexer.errors import LexerError
 from parser.parser import Parser, ParserError
 from semantic.analyzer import SemanticAnalyzer, SemanticError
 from codegen.codegen import CodeGenerator
+from tac.tac import TACGenerator
 
 
 def main():
@@ -62,6 +63,17 @@ def main():
 
         print("=== GENERATED CODE ===")
         print(output)
+                # -------------------------
+        # TAC Generation
+        # -------------------------
+
+        tac_generator = TACGenerator()
+        tac = tac_generator.generate(ast)
+
+        print("=== THREE ADDRESS CODE ===")
+
+        for instruction in tac:
+            print(instruction)
 
     except FileNotFoundError:
         print(f"File not found: {filename}")
