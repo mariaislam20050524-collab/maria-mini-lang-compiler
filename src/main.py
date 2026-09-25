@@ -16,6 +16,8 @@ from tac.tac import TACGenerator
 
 from optimizer.optimizer import Optimizer
 
+from backend.backend import Backend
+
 
 def main():
 
@@ -99,6 +101,27 @@ def main():
 
         for instruction in optimized_tac:
             print(instruction)
+
+        # -------------------------
+        # Backend
+        # -------------------------
+
+        backend = Backend()
+
+        executable_code = backend.generate(
+            optimized_tac
+        )
+
+        print("=== BACKEND CODE ===")
+        print(executable_code)
+
+        # -------------------------
+        # Execution
+        # -------------------------
+
+        print("=== PROGRAM OUTPUT ===")
+
+        backend.execute(executable_code)
 
     except FileNotFoundError:
 

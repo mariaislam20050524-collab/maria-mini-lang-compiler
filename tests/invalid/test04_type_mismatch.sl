@@ -1,0 +1,5 @@
+start {
+
+    num x = "Hello";
+
+}

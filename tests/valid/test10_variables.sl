@@ -1,0 +1,9 @@
+start {
+
+    num x = 5;
+    num y = 10;
+    num z = x + y;
+
+    show z;
+
+}
