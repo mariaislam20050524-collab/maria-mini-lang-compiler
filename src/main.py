@@ -6,9 +6,12 @@ sys.path.append(str(Path(__file__).parent))
 from lexer.lexer import Lexer
 from lexer.errors import LexerError
 from parser.parser import Parser, ParserError
+from semantic.analyzer import SemanticAnalyzer, SemanticError
+from codegen.codegen import CodeGenerator
 
 
 def main():
+
     if len(sys.argv) != 2:
         print("Usage: python src/main.py <source-file>")
         return
@@ -16,6 +19,7 @@ def main():
     filename = sys.argv[1]
 
     try:
+
         with open(filename, "r", encoding="utf-8") as file:
             source_code = file.read()
 
@@ -39,17 +43,40 @@ def main():
         print("=== PARSER SUCCESS ===")
         print("Program parsed successfully.")
 
-        print("=== AST ===")
-        print(ast)
+        # -------------------------
+        # Semantic Analysis
+        # -------------------------
+
+        analyzer = SemanticAnalyzer()
+        analyzer.analyze(ast)
+
+        print("=== SEMANTIC ANALYSIS SUCCESS ===")
+        print("No semantic errors found.")
+
+        # -------------------------
+        # Code Generation
+        # -------------------------
+
+        generator = CodeGenerator()
+        output = generator.generate(ast)
+
+        print("=== GENERATED CODE ===")
+        print(output)
 
     except FileNotFoundError:
         print(f"File not found: {filename}")
 
     except LexerError as error:
-        print(error)
+        print(f"Lexer error: {error}")
 
     except ParserError as error:
         print(f"Parser error: {error}")
+
+    except SemanticError as error:
+        print(f"Semantic error: {error}")
+
+    except Exception as error:
+        print(f"Error: {error}")
 
 
 if __name__ == "__main__":

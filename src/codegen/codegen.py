@@ -22,10 +22,6 @@ class CodeGenerator:
         self.output = []
         self.indent = 0
 
-    # -------------------------
-    # Generate Program
-    # -------------------------
-
     def generate(self, program):
 
         self.output = []
@@ -35,10 +31,6 @@ class CodeGenerator:
 
         return "\n".join(self.output)
 
-    # -------------------------
-    # Add Line
-    # -------------------------
-
     def emit(self, line):
 
         spaces = "    " * self.indent
@@ -47,17 +39,15 @@ class CodeGenerator:
             spaces + line
         )
 
-    # -------------------------
-    # Visit
-    # -------------------------
-
     def visit(self, node):
 
         if isinstance(node, Program):
+
             for statement in node.statements:
                 self.visit(statement)
 
         elif isinstance(node, Block):
+
             self.emit("{")
 
             self.indent += 1
@@ -70,6 +60,7 @@ class CodeGenerator:
             self.emit("}")
 
         elif isinstance(node, VarDeclaration):
+
             value = self.expression(node.expression)
 
             self.emit(
@@ -77,6 +68,7 @@ class CodeGenerator:
             )
 
         elif isinstance(node, Assignment):
+
             value = self.expression(node.expression)
 
             self.emit(
@@ -84,6 +76,7 @@ class CodeGenerator:
             )
 
         elif isinstance(node, PrintStatement):
+
             value = self.expression(node.expression)
 
             self.emit(
@@ -124,16 +117,14 @@ class CodeGenerator:
                 f"while ({condition});"
             )
 
-    # -------------------------
-    # Expression
-    # -------------------------
-
     def expression(self, node):
 
         if isinstance(node, NumberLiteral):
+
             return str(node.value)
 
         if isinstance(node, DecimalLiteral):
+
             return str(node.value)
 
         if isinstance(node, StringLiteral):
@@ -175,6 +166,26 @@ class CodeGenerator:
             left = self.expression(
                 node.left
             )
+
+            if node.operator == "&&":
+
+                right = self.expression(
+                    node.right
+                )
+
+                return (
+                    f"({left} and {right})"
+                )
+
+            if node.operator == "||":
+
+                right = self.expression(
+                    node.right
+                )
+
+                return (
+                    f"({left} or {right})"
+                )
 
             right = self.expression(
                 node.right
